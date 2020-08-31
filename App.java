@@ -8,7 +8,9 @@ import java.util.Scanner;
 
 public class App {
 
+	// Save player position to avoid duplication
 	static ArrayList<Integer> playerPositions = new ArrayList<>();
+	// Save cpu position to avoid duplication
 	static ArrayList<Integer> cpuPositions = new ArrayList<>();
 	
 	public static void main(String[] args) {
@@ -21,37 +23,46 @@ public class App {
 								{' ', '|', ' ', '|', ' '}
 							};
 		
+		// Print Game Board
 		printGameBoard(gameBoard);
 		
-		
+		// Loop until Game over
 		while (true) {
 			Scanner sc = new Scanner(System.in);
 			System.out.print("Enter your placement (1-9): ");
 			int playerPos = sc.nextInt();
 			
+			// check for position is already taken or not
 			while (playerPositions.contains(playerPos) || cpuPositions.contains(playerPos)) {
 				System.out.println("Position taken, enter correct position.");
 				playerPos = sc.nextInt();
 			}
 			
+			// Place position for player
 			placePiece(gameBoard, playerPos, "player");
 
+			// Print winning status for player
 			String result = checkWinner();
 			if (result.length() > 0) {
 				System.out.println(result);
 				break;
 			}
 			
+			// Get random number between 1-9 for cpu
 			Random rand = new Random();
 			int cpuPos = rand.nextInt(9) + 1;
 
+			// check for position is already taken or not
 			while (playerPositions.contains(cpuPos) || cpuPositions.contains(cpuPos)) {
 				cpuPos = rand.nextInt(9) + 1;
 			}
+			// Place position for cpu
 			placePiece(gameBoard, cpuPos, "cpu");
 			
+			// Print game board
 			printGameBoard(gameBoard);
 			
+			// Print winning status for cpu 
 			result = checkWinner();
 			if (result.length() > 0) {
 				System.out.println(result);
@@ -62,6 +73,7 @@ public class App {
 		}
 	}
 	
+	// Print Game board
 	public static void printGameBoard(char[][] gameBoard) {
 		for (char[] row: gameBoard) {
 			for (char c: row) {
@@ -71,6 +83,7 @@ public class App {
 		}
 	}
 	
+	// Place position
 	public static void placePiece(char[][] gameBoard, int pos, String user) {
 		char symbol = ' ';
 		if (user.equals("player")) {
@@ -115,6 +128,7 @@ public class App {
 		}
 	}
 	
+	// Get winning status function
 	public static String checkWinner() {
 		List<Integer> topRow = Arrays.asList(1, 2, 3);
 		List<Integer> midRow = Arrays.asList(4, 5, 6);
